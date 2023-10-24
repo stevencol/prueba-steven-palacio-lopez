@@ -1,6 +1,7 @@
 package com.prueba.entitys;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,15 +23,17 @@ public class TutorialDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    @ManyToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt")
     private Date craateAt;
 
-    @ManyToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName="id")
-    private UserEntity user;
-
+    @PrePersist
+    private void setCrate() {
+        this.craateAt = new Date();
+    }
 
 
 }
