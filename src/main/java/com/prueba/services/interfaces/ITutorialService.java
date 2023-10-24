@@ -14,6 +14,6 @@ public interface ITutorialService {
 
     public ResponseEntity<Map<String, Object>> editTutorial(TutorialDto tutorialDto);
 
-    public ResponseEntity<Map<String, Object>> getByVisible(TutorialDto tutorialDto);
+    public ResponseEntity<Map<String, Object>> findAll();
 
 }

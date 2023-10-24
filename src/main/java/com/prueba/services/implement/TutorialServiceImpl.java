@@ -13,6 +13,7 @@ import com.prueba.repositorys.TutorialRepository;
 import com.prueba.repositorys.UserRepository;
 import com.prueba.services.interfaces.ITutorialDetaiService;
 import com.prueba.services.interfaces.ITutorialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -71,7 +73,23 @@ public class TutorialServiceImpl implements ITutorialService {
 
     @Override
     public ResponseEntity<Map<String, Object>> deleteTutorial(Long id) {
-        return null;
+        Map<String, Object> response = new HashMap<String, Object>();
+        TutorialEntity tutorial = repository.findById(id).orElse(null);
+        if (tutorial == null) {
+            response.put("error", "No exite registro con esa id");
+            response.put("status", HttpStatus.BAD_REQUEST.toString());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            repository.deleteById(id);
+            response.put("message", "Eliminacion corretcta");
+            response.put("status", HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (DataAccessException e) {
+            response.put("error", "Se presento : " + e.getMessage() + " al elminiar");
+            response.put("status", HttpStatus.BAD_REQUEST.toString());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
@@ -101,11 +119,62 @@ public class TutorialServiceImpl implements ITutorialService {
 
     @Override
     public ResponseEntity<Map<String, Object>> editTutorial(TutorialDto tutorialDto) {
-        return null;
+        Map<String, Object> response = new HashMap<>();
+        if (tutorialDto.getId() == null || tutorialDto.getDetails().getId() == null || tutorialDto.getDetails().getUser().getId() == null) {
+            response.put("error", "Tutorial, Detalles , User tiene que tener id");
+            response.put("status", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            TutorialEntity newTutorial = tutorialMapper.getTutorilEntity(tutorialDto);
+            newTutorial.setId(tutorialDto.getId());
+            System.out.println(newTutorial + "1 PASO");
+
+            if (newTutorial == null) {
+                response.put("error", "Verifica los datos");
+                response.put("status", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            }
+            TutorialDetailsEntity details = newTutorial.getDetails();
+            UserEntity user = userRepository.findById(tutorialDto.getDetails().getUser().getId()).orElse(null);
+            details.setId(tutorialDto.getDetails().getId());
+            details.setUser(user);
+            details.setCraateAt(tutorialDto.getDetails().getCraateAt());
+            newTutorial.setDetails(details);
+            System.out.println(repository.save(newTutorial));
+
+            response.put("message", "Se completo el registro ");
+            response.put("status", HttpStatus.OK);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+
+        } catch (DataAccessException ex) {
+            response.put("error", "Se produjo el siguiente error al guardar : " + ex.getMostSpecificCause());
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
-    public ResponseEntity<Map<String, Object>> getByVisible(TutorialDto tutorialDto) {
-        return null;
+    public ResponseEntity<Map<String, Object>> findAll() {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<TutorialEntity> tutorials = (List<TutorialEntity>) repository.findAll();
+            if (tutorials.isEmpty()) {
+                response.put("message", "No se encontraron errores ");
+                response.put("status", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+            }
+            response.put("message", "busqueda complteta");
+            response.put("status", HttpStatus.OK.toString());
+            response.put("tutoriales", tutorialMapper.userByVisibe(tutorials));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+        } catch (DataAccessException ex) {
+            response.put("error", "Se produjo el siguiente error al consultar : " + ex.getMostSpecificCause());
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

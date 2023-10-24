@@ -1,10 +1,13 @@
 package com.prueba.mappers;
 
+import com.prueba.dtos.TutorialDto;
 import com.prueba.dtos.UserDto;
+import com.prueba.entitys.TutorialEntity;
 import com.prueba.entitys.UserEntity;
 import org.springframework.stereotype.Component;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.List;
 
 @Component
 public class UserMaper {
@@ -33,5 +36,6 @@ public class UserMaper {
 
     }
 
-
 }
+
+

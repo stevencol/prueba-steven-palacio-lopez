@@ -6,6 +6,9 @@ import com.prueba.enums.States;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class TutorialMapper {
 
@@ -33,5 +36,13 @@ public class TutorialMapper {
                 .build();
 
     }
+
+
+    public List<TutorialDto> userByVisibe(List<TutorialEntity> tutorials) {
+
+        return tutorials.stream().filter(tutorial -> !tutorial.getStates().equals("VISIBLE")).map(this::getTutorilDto).collect(Collectors.toList());
+
+    }
+
 
 }
