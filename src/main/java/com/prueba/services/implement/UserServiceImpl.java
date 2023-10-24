@@ -1,9 +1,11 @@
 package com.prueba.services.implement;
 
 import com.prueba.dtos.UserDto;
+import com.prueba.entitys.UserEntity;
 import com.prueba.mappers.UserMaper;
 import com.prueba.repositorys.UserRepository;
 import com.prueba.services.interfaces.IUserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,7 @@ public class UserServiceImpl implements IUserService {
     public ResponseEntity<Map<String, Object>> createUser(UserDto user) {
 
         Map<String, Object> response = new HashMap<>();
-        
+
 
         try {
             userRepos.save(maper.getEntity(user));
@@ -49,14 +51,15 @@ public class UserServiceImpl implements IUserService {
         Map<String, Object> response = new HashMap<String, Object>();
 
         try {
-            UserDto user = maper.getDto(userRepos.findById(id).orElse(null));
+            UserEntity user = userRepos.findById(id).orElse(null);
+
             if (user == null) {
                 response.put("error", "No se encotron ningun registro");
                 response.put("status", HttpStatus.BAD_REQUEST);
                 return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
             }
             response.put("message", "Busqueda Correcta");
-            response.put("user", user);
+            response.put("user", maper.getDto(user));
             response.put("status", HttpStatus.OK);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
         } catch (DataAccessException e) {

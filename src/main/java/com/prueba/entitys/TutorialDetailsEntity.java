@@ -1,7 +1,6 @@
 package com.prueba.entitys;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

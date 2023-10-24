@@ -9,11 +9,11 @@ import java.util.Map;
 @Service
 public interface ITutorialDetaiService {
 
-    public ResponseEntity<Map<String, Object>> getTutorial(Long id);
+    ResponseEntity<Map<String, Object>> getTutorial(Long id);
 
-    public ResponseEntity<Map<String, Object>> deleteTutorial(Long id);
+    ResponseEntity<Map<String, Object>> deleteTutorial(Long id);
 
-    public ResponseEntity<Map<String, Object>> createTutorial(TutorialDetailsDto tutorialDto);
+    ResponseEntity<Map<String, Object>> createTutorial(TutorialDetailsDto tutorialDto);
 
-    public ResponseEntity<Map<String, Object>> editTutorial(TutorialDetailsDto tutorialDto);
+    ResponseEntity<Map<String, Object>> editTutorial(TutorialDetailsDto tutorialDto);
 }

@@ -2,7 +2,6 @@ package com.prueba.entitys;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.prueba.enums.States;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

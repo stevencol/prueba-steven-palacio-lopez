@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface IUserService {
 
-    public ResponseEntity<Map<String, Object>> createUser(UserDto user) ;
-    public ResponseEntity<Map<String, Object>> getUser(Long id) ;
+    ResponseEntity<Map<String, Object>> createUser(UserDto user);
+
+    ResponseEntity<Map<String, Object>> getUser(Long id);
 }

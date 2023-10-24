@@ -2,7 +2,6 @@ package com.prueba.controller;
 
 
 import com.prueba.dtos.TutorialDto;
-import com.prueba.services.interfaces.ITutorialDetaiService;
 import com.prueba.services.interfaces.ITutorialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
 import java.util.HashMap;
 import java.util.Map;
 

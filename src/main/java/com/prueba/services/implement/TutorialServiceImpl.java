@@ -1,7 +1,6 @@
 package com.prueba.services.implement;
 
 import com.prueba.dtos.TutorialDto;
-import com.prueba.dtos.UserDto;
 import com.prueba.entitys.TutorialDetailsEntity;
 import com.prueba.entitys.TutorialEntity;
 import com.prueba.entitys.UserEntity;
@@ -11,9 +10,7 @@ import com.prueba.mappers.UserMaper;
 import com.prueba.repositorys.TutorialDetailsRepository;
 import com.prueba.repositorys.TutorialRepository;
 import com.prueba.repositorys.UserRepository;
-import com.prueba.services.interfaces.ITutorialDetaiService;
 import com.prueba.services.interfaces.ITutorialService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 public class TutorialServiceImpl implements ITutorialService {
@@ -105,7 +101,6 @@ public class TutorialServiceImpl implements ITutorialService {
             tutorial.setDetails(details);
             System.out.println(repository.save(tutorial));
 
-
             response.put("message", "Se completo el registro ");
             response.put("status", HttpStatus.OK);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
@@ -162,7 +157,7 @@ public class TutorialServiceImpl implements ITutorialService {
         try {
             List<TutorialEntity> tutorials = (List<TutorialEntity>) repository.findAll();
             if (tutorials.isEmpty()) {
-                response.put("message", "No se encontraron errores ");
+                response.put("message", "No se encontraron registros ");
                 response.put("status", HttpStatus.NOT_FOUND);
                 return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
             }
